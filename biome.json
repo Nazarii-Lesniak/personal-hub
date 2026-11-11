@@ -12,11 +12,25 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "indentWidth": 2
+    "indentWidth": 2,
+
+    "formatWithErrors": false,
+    "attributePosition": "auto",
+    "lineWidth": 80
   },
   "css": {
     "parser": {
       "tailwindDirectives": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "always",
+      "bracketSameLine": false,
+      "bracketSpacing": true,
+      "jsxQuoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all"
     }
   },
   "linter": {
