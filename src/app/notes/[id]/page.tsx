@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { NoteCard } from "@/entities/note";
-import { MOCK_NOTES } from "@/mocks/mockCardContent";
+import { getNoteById, NoteCard } from "@/entities/note";
 
 interface NotePageProps {
   params: Promise<{ id: string }>;
@@ -15,7 +14,7 @@ export const metadata: Metadata = {
 export default async function Note({ params }: NotePageProps) {
   const { id } = await params;
 
-  const note = MOCK_NOTES.find((note) => note.id === id);
+  const note = await getNoteById(id);
 
   if (!note) {
     notFound();
