@@ -1,10 +1,16 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { NoteCard } from "@/entities/note/ui/NoteCard";
+
+import { NoteCard } from "@/entities/note";
 import { MOCK_NOTES } from "@/mocks/mockCardContent";
 
 interface NotePageProps {
   params: Promise<{ id: string }>;
 }
+
+export const metadata: Metadata = {
+  title: "Note",
+};
 
 export default async function Note({ params }: NotePageProps) {
   const { id } = await params;
@@ -16,7 +22,7 @@ export default async function Note({ params }: NotePageProps) {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-2">
+    <main className="flex flex-1 items-center justify-center">
       <NoteCard showBack>
         <span>{note.content}</span>
       </NoteCard>
