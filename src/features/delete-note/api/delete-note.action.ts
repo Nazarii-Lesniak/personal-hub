@@ -2,9 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 
-import { deleteNote } from "@/entities/note";
+import { deleteNote, noteIdSchema } from "@/entities/note";
 import type { DeleteNoteState } from "@/features/delete-note";
 
 export async function deleteNoteAction(
@@ -13,7 +12,7 @@ export async function deleteNoteAction(
 ): Promise<DeleteNoteState> {
   const id = formData.get("id");
 
-  const result = z.uuid().safeParse(id);
+  const result = noteIdSchema.safeParse(id);
 
   if (!result.success) {
     return {

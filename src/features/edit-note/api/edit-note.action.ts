@@ -2,9 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 
-import { noteSchema, updateNote } from "@/entities/note";
+import { noteIdSchema, noteSchema, updateNote } from "@/entities/note";
 import type { EditNoteState } from "@/features/edit-note";
 
 export async function editNoteAction(
@@ -14,7 +13,7 @@ export async function editNoteAction(
   const id = formData.get("id");
   const content = formData.get("content");
 
-  const idResult = z.uuid().safeParse(id);
+  const idResult = noteIdSchema.safeParse(id);
 
   const contentResult = noteSchema.safeParse({
     content: typeof content === "string" ? content : "",

@@ -5,5 +5,5 @@ export {
   getNotes,
   updateNote,
 } from "./api/notes.repository";
-export { noteSchema } from "./model/note.schema";
+export { noteIdSchema, noteSchema } from "./model/note.schema";
 export { NoteCard } from "./ui/NoteCard";
