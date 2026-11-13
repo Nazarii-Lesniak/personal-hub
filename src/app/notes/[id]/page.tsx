@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getNoteById, NoteCard } from "@/entities/note";
+import { getNoteById, NoteCard, noteIdSchema } from "@/entities/note";
 import { DeleteNoteForm } from "@/features/delete-note";
 
 interface NotePageProps {
@@ -15,6 +15,10 @@ export const metadata: Metadata = {
 
 export default async function Note({ params }: NotePageProps) {
   const { id } = await params;
+
+  if (!noteIdSchema.safeParse(id).success) {
+    notFound();
+  }
 
   const note = await getNoteById(id);
 

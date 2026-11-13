@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
-import { getNoteById } from "@/entities/note";
+import { getNoteById, noteIdSchema } from "@/entities/note";
 import { EditNoteForm } from "@/features/edit-note";
 
 interface EditNotePageProps {
@@ -16,6 +16,10 @@ export const metadata: Metadata = {
 
 export default async function EditNotePage({ params }: EditNotePageProps) {
   const { id } = await params;
+
+  if (!noteIdSchema.safeParse(id).success) {
+    notFound();
+  }
 
   if (!z.uuid().safeParse(id).success) {
     notFound();
