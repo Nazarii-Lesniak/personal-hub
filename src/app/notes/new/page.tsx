@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { CreateNoteForm } from "@/features/create-note/ui/CreateNoteForm";
+import { CreateNoteForm } from "@/features/create-note";
 
 export const metadata: Metadata = {
   title: "Create note",

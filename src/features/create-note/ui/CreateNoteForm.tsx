@@ -2,10 +2,12 @@
 
 import { useActionState } from "react";
 
-import { type CreateNoteState, createNoteAction } from "@/features/create-note";
+import { createNoteAction } from "../api/create-note.action";
+import type { CreateNoteState } from "../model/create-note.types";
 
 const initialState: CreateNoteState = {
   error: null,
+  content: "",
 };
 
 export function CreateNoteForm() {
@@ -18,6 +20,7 @@ export function CreateNoteForm() {
     <form action={formAction} className="flex w-full flex-col gap-4">
       <textarea
         name="content"
+        defaultValue={state.content}
         required
         maxLength={10_000}
         placeholder="Write your note..."

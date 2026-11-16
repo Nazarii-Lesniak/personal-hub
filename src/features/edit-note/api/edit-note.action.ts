@@ -4,37 +4,38 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { noteIdSchema, noteSchema, updateNote } from "@/entities/note";
-import type { EditNoteState } from "@/features/edit-note";
+import type { EditNoteState } from "../model/edit-note.types";
 
 export async function editNoteAction(
   _prevState: EditNoteState,
   formData: FormData,
 ): Promise<EditNoteState> {
   const id = formData.get("id");
-  const content = formData.get("content");
+  const rawContent = formData.get("content");
+  const content = typeof rawContent === "string" ? rawContent : "";
 
   const idResult = noteIdSchema.safeParse(id);
 
-  const contentResult = noteSchema.safeParse({
-    content: typeof content === "string" ? content : "",
-  });
-
   if (!idResult.success) {
     return {
-      error: idResult.error.issues[0]?.message ?? "Invalid id",
+      error: idResult.error.issues[0]?.message ?? "Invalid note id",
+      content,
     };
   }
+
+  const contentResult = noteSchema.safeParse({ content });
 
   if (!contentResult.success) {
     return {
       error: contentResult.error.issues[0]?.message ?? "Invalid note content",
+      content,
     };
   }
 
   const note = await updateNote(idResult.data, contentResult.data.content);
 
   if (!note) {
-    return { error: "Note not found" };
+    return { error: "Note not found", content };
   }
 
   revalidatePath("/notes");

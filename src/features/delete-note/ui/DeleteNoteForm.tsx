@@ -1,8 +1,9 @@
 "use client";
 
 import { type SubmitEvent, useActionState } from "react";
-import type { DeleteNoteState } from "@/features/delete-note";
-import { deleteNoteAction } from "@/features/delete-note/api/delete-note.action";
+
+import { deleteNoteAction } from "../api/delete-note.action";
+import type { DeleteNoteState } from "../model/delete-note.types";
 
 interface DeleteNoteFormProps {
   id: string;
