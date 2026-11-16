@@ -1,6 +1,19 @@
 "use client";
 
-import { type SubmitEvent, useActionState } from "react";
+import { Trash2 } from "lucide-react";
+import { useActionState } from "react";
+
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/ui/alert-dialog";
+import { Button } from "@/shared/ui/button";
 
 import { deleteNoteAction } from "../api/delete-note.action";
 import type { DeleteNoteState } from "../model/delete-note.types";
@@ -19,38 +32,38 @@ export function DeleteNoteForm({ id }: DeleteNoteFormProps) {
     initialState,
   );
 
-  const handleSubmit = (event: SubmitEvent) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this note?",
-    );
-
-    if (!confirmed) {
-      event.preventDefault();
-    }
-  };
-
   return (
-    <form
-      action={formAction}
-      onSubmit={handleSubmit}
-      className="flex flex-col items-center gap-2"
-    >
-      <input type="hidden" name="id" value={id} />
+    <AlertDialog>
+      <AlertDialogTrigger render={<Button variant="destructive" />}>
+        <Trash2 />
+        Delete
+      </AlertDialogTrigger>
 
-      <button
-        type="submit"
-        disabled={isPending}
-        aria-describedby={state.error ? "delete-note-error" : undefined}
-        className="cursor-pointer rounded-xl bg-red-700 px-4 py-2 text-white disabled:opacity-50"
-      >
-        {isPending ? "Deleting..." : "Delete note"}
-      </button>
+      <AlertDialogContent>
+        <form action={formAction} className="contents">
+          <input type="hidden" name="id" value={id} />
 
-      {state.error && (
-        <p id="delete-note-error" role="alert" className="text-sm text-red-400">
-          {state.error}
-        </p>
-      )}
-    </form>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this note?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          {state.error && (
+            <p role="alert" className="text-sm text-destructive">
+              {state.error}
+            </p>
+          )}
+
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+            <Button type="submit" variant="destructive" disabled={isPending}>
+              {isPending ? "Deleting..." : "Delete"}
+            </Button>
+          </AlertDialogFooter>
+        </form>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
