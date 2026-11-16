@@ -1,4 +1,4 @@
-import { type ReactNode, ViewTransition } from "react";
+import type { ReactNode } from "react";
 
 interface PageTransitionProps {
   children: ReactNode;
@@ -6,8 +6,8 @@ interface PageTransitionProps {
 
 export function PageTransition({ children }: PageTransitionProps) {
   return (
-    <ViewTransition enter="page-enter" exit="page-exit" default="none">
+    <div className="flex flex-1 flex-col animate-in duration-300 fade-in slide-in-from-bottom-2 motion-reduce:animate-none">
       {children}
-    </ViewTransition>
+    </div>
   );
 }
