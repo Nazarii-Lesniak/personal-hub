@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getNotes, NoteCard } from "@/entities/note/";
+import { getNotes, NoteCard } from "@/entities/note";
 
 export const metadata: Metadata = {
   title: "Notes",

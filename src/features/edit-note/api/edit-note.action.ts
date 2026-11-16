@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { noteIdSchema, noteSchema, updateNote } from "@/entities/note";
-import type { EditNoteState } from "@/features/edit-note";
+import type { EditNoteState } from "../model/edit-note.types";
 
 export async function editNoteAction(
   _prevState: EditNoteState,

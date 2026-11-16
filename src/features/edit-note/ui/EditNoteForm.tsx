@@ -2,9 +2,10 @@
 
 import { useActionState } from "react";
 
-import { type EditNoteState, editNoteAction } from "@/features/edit-note";
+import { editNoteAction } from "../api/edit-note.action";
+import type { EditNoteState } from "../model/edit-note.types";
 
-interface EdidNoteFormProps {
+interface EditNoteFormProps {
   id: string;
   content: string;
 }
@@ -13,7 +14,7 @@ const initialState: EditNoteState = {
   error: null,
 };
 
-export function EditNoteForm({ id, content }: EdidNoteFormProps) {
+export function EditNoteForm({ id, content }: EditNoteFormProps) {
   const [state, formAction, isPending] = useActionState(
     editNoteAction,
     initialState,

@@ -2,7 +2,8 @@
 
 import { useActionState } from "react";
 
-import { type CreateNoteState, createNoteAction } from "@/features/create-note";
+import { createNoteAction } from "../api/create-note.action";
+import type { CreateNoteState } from "../model/create-note.types";
 
 const initialState: CreateNoteState = {
   error: null,

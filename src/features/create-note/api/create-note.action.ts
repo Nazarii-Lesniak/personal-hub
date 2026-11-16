@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { createNote, noteSchema } from "@/entities/note";
-import type { CreateNoteState } from "@/features/create-note";
+import type { CreateNoteState } from "../model/create-note.types";
 
 export async function createNoteAction(
   _prevState: CreateNoteState,
