@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
 
 import { noteIdSchema, noteSchema, updateNote } from "@/entities/note";
 import type { EditNoteState } from "../model/edit-note.types";
@@ -41,5 +41,5 @@ export async function editNoteAction(
   revalidatePath("/notes");
   revalidatePath(`/notes/${note.id}`);
 
-  redirect(`/notes/${note.id}`);
+  redirect(`/notes/${note.id}`, RedirectType.replace);
 }
