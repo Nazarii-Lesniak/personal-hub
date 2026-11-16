@@ -2,6 +2,9 @@
 
 import { useActionState } from "react";
 
+import { Button } from "@/shared/ui/button";
+import { Textarea } from "@/shared/ui/textarea";
+
 import { createNoteAction } from "../api/create-note.action";
 import type { CreateNoteState } from "../model/create-note.types";
 
@@ -18,28 +21,31 @@ export function CreateNoteForm() {
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-4">
-      <textarea
+      <Textarea
         name="content"
-        defaultValue={state.content}
         required
         maxLength={10_000}
+        defaultValue={state.content}
         placeholder="Write your note..."
-        className="min-h-40 w-full resize-y rounded-xl border p-3"
+        aria-label="Note content"
+        aria-invalid={state.error !== null}
+        aria-describedby={state.error ? "content-error" : undefined}
+        className="min-h-40 sm:min-h-52 md:min-h-64"
       />
 
       {state.error && (
-        <p role="alert" className="text-sm text-red-400">
+        <p id="content-error" role="alert" className="text-sm text-destructive">
           {state.error}
         </p>
       )}
 
-      <button
+      <Button
         type="submit"
         disabled={isPending}
-        className="cursor-pointer rounded-xl bg-cyan-900 px-4 py-2 text-white disabled:opacity-50"
+        className="w-full sm:w-auto sm:self-end"
       >
         {isPending ? "Creating..." : "Create note"}
-      </button>
+      </Button>
     </form>
   );
 }
