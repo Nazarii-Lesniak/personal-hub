@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
 
 import { deleteNote, noteIdSchema } from "@/entities/note";
 import type { DeleteNoteState } from "../model/delete-note.types";
@@ -28,5 +28,5 @@ export async function deleteNoteAction(
 
   revalidatePath("/notes");
 
-  redirect("/notes");
+  redirect("/notes", RedirectType.replace);
 }
