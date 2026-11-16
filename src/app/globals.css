@@ -127,3 +127,61 @@
     @apply font-sans;
   }
 }
+
+/* Page transitions (React <ViewTransition>) */
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(.page-exit) {
+  animation: 150ms ease-out view-transition-fade reverse;
+}
+
+::view-transition-new(.page-enter) {
+  animation:
+    220ms ease-out 150ms both view-transition-fade,
+    300ms ease-out 150ms both view-transition-slide-up;
+}
+
+@keyframes view-transition-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes view-transition-slide-up {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Keep the header fixed while the page content animates */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+
+::view-transition-old(site-header) {
+  display: none;
+}
+
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    /* biome-ignore lint/complexity/noImportantStyles: redefinition required for prefers-reduced-motion */
+    animation-duration: 0s !important;
+    /* biome-ignore lint/complexity/noImportantStyles: redefinition required for prefers-reduced-motion */
+    animation-delay: 0s !important;
+  }
+}
