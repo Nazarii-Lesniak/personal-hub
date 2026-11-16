@@ -3,22 +3,17 @@
 import { useActionState } from "react";
 
 import { editNoteAction } from "../api/edit-note.action";
-import type { EditNoteState } from "../model/edit-note.types";
 
 interface EditNoteFormProps {
   id: string;
   content: string;
 }
 
-const initialState: EditNoteState = {
-  error: null,
-};
-
 export function EditNoteForm({ id, content }: EditNoteFormProps) {
-  const [state, formAction, isPending] = useActionState(
-    editNoteAction,
-    initialState,
-  );
+  const [state, formAction, isPending] = useActionState(editNoteAction, {
+    error: null,
+    content,
+  });
 
   return (
     <form action={formAction} className="flex w-full flex-col gap-4">
@@ -26,7 +21,7 @@ export function EditNoteForm({ id, content }: EditNoteFormProps) {
 
       <textarea
         name="content"
-        defaultValue={content}
+        defaultValue={state.content}
         required
         maxLength={10_000}
         aria-describedby={state.error ? "content-error" : undefined}

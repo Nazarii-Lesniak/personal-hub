@@ -11,30 +11,31 @@ export async function editNoteAction(
   formData: FormData,
 ): Promise<EditNoteState> {
   const id = formData.get("id");
-  const content = formData.get("content");
+  const rawContent = formData.get("content");
+  const content = typeof rawContent === "string" ? rawContent : "";
 
   const idResult = noteIdSchema.safeParse(id);
 
-  const contentResult = noteSchema.safeParse({
-    content: typeof content === "string" ? content : "",
-  });
-
   if (!idResult.success) {
     return {
-      error: idResult.error.issues[0]?.message ?? "Invalid id",
+      error: idResult.error.issues[0]?.message ?? "Invalid note id",
+      content,
     };
   }
+
+  const contentResult = noteSchema.safeParse({ content });
 
   if (!contentResult.success) {
     return {
       error: contentResult.error.issues[0]?.message ?? "Invalid note content",
+      content,
     };
   }
 
   const note = await updateNote(idResult.data, contentResult.data.content);
 
   if (!note) {
-    return { error: "Note not found" };
+    return { error: "Note not found", content };
   }
 
   revalidatePath("/notes");
