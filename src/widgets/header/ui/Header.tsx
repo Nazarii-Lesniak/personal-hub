@@ -15,13 +15,20 @@ export function Header() {
         >
           PersonalHub
         </Link>
-        <nav aria-label="Main">
+        <nav aria-label="Main" className="flex items-center gap-1">
           <Button
             variant="ghost"
             nativeButton={false}
             render={<Link href="/notes" />}
           >
             Notes
+          </Button>
+          <Button
+            variant="ghost"
+            nativeButton={false}
+            render={<Link href="/calendar" />}
+          >
+            Calendar
           </Button>
         </nav>
       </div>
