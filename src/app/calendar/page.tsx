@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 
 import { eventMonthSchema, getEventsByMonth } from "@/entities/event";
 import { formatMonthParam } from "@/shared/lib/date/month";
@@ -13,16 +14,24 @@ interface CalendarPageProps {
   searchParams: Promise<{ month?: string | string[] }>;
 }
 
+async function resolveMonth(value: string | string[] | undefined) {
+  const result = eventMonthSchema.safeParse(value);
+
+  if (result.success) {
+    return result.data;
+  }
+
+  await connection();
+
+  return formatMonthParam(new Date());
+}
+
 export default async function CalendarPage({
   searchParams,
 }: CalendarPageProps) {
   const { month } = await searchParams;
 
-  const monthResult = eventMonthSchema.safeParse(month);
-  const currentMonth = monthResult.success
-    ? monthResult.data
-    : formatMonthParam(new Date());
-
+  const currentMonth = await resolveMonth(month);
   const events = await getEventsByMonth(currentMonth);
 
   return (
