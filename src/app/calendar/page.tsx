@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { connection } from "next/server";
 
 import { eventMonthSchema, getEventsByMonth } from "@/entities/event";
+import { UrlSearchBar } from "@/features/filter-items";
 import { formatMonthParam } from "@/shared/lib/date/month";
 import { PageTransition } from "@/shared/ui/page-transition";
 import { CalendarView } from "@/widgets/calendar";
@@ -11,7 +12,10 @@ export const metadata: Metadata = {
 };
 
 interface CalendarPageProps {
-  searchParams: Promise<{ month?: string | string[] }>;
+  searchParams: Promise<{
+    month?: string | string[];
+    q?: string | string[];
+  }>;
 }
 
 async function resolveMonth(value: string | string[] | undefined) {
@@ -26,13 +30,18 @@ async function resolveMonth(value: string | string[] | undefined) {
   return formatMonthParam(new Date());
 }
 
+function resolveQuery(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
 export default async function CalendarPage({
   searchParams,
 }: CalendarPageProps) {
-  const { month } = await searchParams;
+  const { month, q: query } = await searchParams;
 
   const currentMonth = await resolveMonth(month);
-  const events = await getEventsByMonth(currentMonth);
+  const currentQuery = resolveQuery(query);
+  const events = await getEventsByMonth(currentMonth, currentQuery);
 
   return (
     <PageTransition>
@@ -41,7 +50,16 @@ export default async function CalendarPage({
           Calendar
         </h1>
 
-        <CalendarView month={currentMonth} events={events} />
+        <UrlSearchBar
+          placeholder="Search events..."
+          ariaLabel="Search events"
+        />
+
+        <CalendarView
+          month={currentMonth}
+          events={events}
+          hasActiveQuery={Boolean(currentQuery?.trim())}
+        />
       </div>
     </PageTransition>
   );
