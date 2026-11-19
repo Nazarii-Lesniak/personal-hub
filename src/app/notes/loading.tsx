@@ -9,6 +9,7 @@ export default function LoadingNotesListPage() {
 
       <div className="flex items-center justify-between gap-4">
         <Skeleton className="h-8 w-28 md:h-9" />
+        <Skeleton className="h-8 w-110 md:h-9" />
         <Skeleton className="h-9 w-32" />
       </div>
 

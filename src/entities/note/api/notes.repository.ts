@@ -1,12 +1,17 @@
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, ilike } from "drizzle-orm";
 
 import { db } from "@/shared/lib/db";
 import { notes } from "@/shared/lib/db/schema";
 
-export async function getNotes() {
-  return db.select().from(notes).orderBy(desc(notes.createdAt));
-}
+export async function getNotes(query?: string) {
+  const trimmedQuery = query?.trim();
 
+  return db
+    .select()
+    .from(notes)
+    .where(trimmedQuery ? ilike(notes.content, `%${trimmedQuery}%`) : undefined)
+    .orderBy(desc(notes.createdAt));
+}
 export async function getNoteById(id: string) {
   const [note] = await db.select().from(notes).where(eq(notes.id, id)).limit(1);
 
