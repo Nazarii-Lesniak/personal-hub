@@ -1,20 +1,27 @@
-import { and, asc, eq, gte, lt } from "drizzle-orm";
+import { and, asc, eq, gte, ilike, lt } from "drizzle-orm";
 
 import { db } from "@/shared/lib/db";
 import { events } from "@/shared/lib/db/schema";
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
-export async function getEventsByMonth(month: string) {
+export async function getEventsByMonth(month: string, query?: string) {
   const [year, monthNumber] = month.split("-").map(Number);
 
   const from = new Date(Date.UTC(year, monthNumber - 1, 1) - DAY_IN_MS);
   const to = new Date(Date.UTC(year, monthNumber, 1) + DAY_IN_MS);
+  const trimmedQuery = query?.trim();
 
   return db
     .select()
     .from(events)
-    .where(and(gte(events.startsAt, from), lt(events.startsAt, to)))
+    .where(
+      and(
+        gte(events.startsAt, from),
+        lt(events.startsAt, to),
+        trimmedQuery ? ilike(events.title, `%${trimmedQuery}%`) : undefined,
+      ),
+    )
     .orderBy(asc(events.startsAt));
 }
 

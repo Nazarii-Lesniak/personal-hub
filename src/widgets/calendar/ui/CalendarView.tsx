@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useOptimistic, useState, useTransition } from "react";
 
 import type { CalendarEvent } from "@/entities/event";
@@ -17,14 +17,21 @@ import { Card, CardContent } from "@/shared/ui/card";
 import { Skeleton } from "@/shared/ui/skeleton";
 
 import { getEventsForDay, getSelectedDate } from "../model/calendar-day";
+import { GroupedEventList } from "./GroupedEventList";
 
 interface CalendarViewProps {
   month: string;
   events: CalendarEvent[];
+  hasActiveQuery?: boolean;
 }
 
-export function CalendarView({ month, events }: CalendarViewProps) {
+export function CalendarView({
+  month,
+  events,
+  hasActiveQuery = false,
+}: CalendarViewProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const isClient = useIsClient();
   const [isPending, startTransition] = useTransition();
@@ -38,10 +45,12 @@ export function CalendarView({ month, events }: CalendarViewProps) {
 
   function handleMonthChange(nextMonth: Date) {
     const value = formatMonthParam(nextMonth);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("month", value);
 
     startTransition(() => {
       setOptimisticMonth(value);
-      router.push(`/calendar?month=${value}`, { scroll: false });
+      router.push(`/calendar?${params.toString()}`, { scroll: false });
     });
   }
 
@@ -89,7 +98,11 @@ export function CalendarView({ month, events }: CalendarViewProps) {
 
         <div className={cn("transition-opacity", isPending && "opacity-60")}>
           {isClient ? (
-            <EventList events={selectedDayEvents} />
+            hasActiveQuery ? (
+              <GroupedEventList events={events} />
+            ) : (
+              <EventList events={selectedDayEvents} />
+            )
           ) : (
             <Skeleton className="h-16 rounded-xl" />
           )}
@@ -101,13 +114,16 @@ export function CalendarView({ month, events }: CalendarViewProps) {
 
 interface EventListProps {
   events: CalendarEvent[];
+  hasActiveQuery?: boolean;
 }
 
-function EventList({ events }: EventListProps) {
+function EventList({ events, hasActiveQuery }: EventListProps) {
   if (events.length === 0) {
     return (
       <div className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">
-        No events for this day.
+        {hasActiveQuery
+          ? "No matching events for this day."
+          : "No events for this day."}
       </div>
     );
   }

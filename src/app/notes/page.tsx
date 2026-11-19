@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { getNotes, NoteCard } from "@/entities/note";
+import { UrlSearchBar } from "@/features/filter-items";
 import { Button } from "@/shared/ui/button";
 import { PageTransition } from "@/shared/ui/page-transition";
 
@@ -10,8 +11,13 @@ export const metadata: Metadata = {
   title: "Notes",
 };
 
-export default async function NotesListPage() {
-  const notes = await getNotes();
+interface NotesPageProps {
+  searchParams: Promise<{ q?: string }>;
+}
+
+export default async function NotesListPage({ searchParams }: NotesPageProps) {
+  const { q: query } = await searchParams;
+  const notes = await getNotes(query);
 
   return (
     <PageTransition>
@@ -20,6 +26,10 @@ export default async function NotesListPage() {
           <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
             Notes
           </h1>
+          <UrlSearchBar
+            placeholder="Search notes..."
+            ariaLabel="Search notes"
+          />
           <Button
             nativeButton={false}
             render={<Link href="/notes/new" />}
@@ -46,14 +56,18 @@ export default async function NotesListPage() {
           </ul>
         ) : (
           <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed p-8 text-center md:p-12">
-            <p className="text-muted-foreground">No notes yet.</p>
-            <Button
-              variant="outline"
-              nativeButton={false}
-              render={<Link href="/notes/new" />}
-            >
-              Create your first note
-            </Button>
+            <p className="text-muted-foreground">
+              {query?.trim() ? "No notes found." : "No notes yet."}
+            </p>
+            {!query?.trim() && (
+              <Button
+                variant="outline"
+                nativeButton={false}
+                render={<Link href="/notes/new" />}
+              >
+                Create your first note
+              </Button>
+            )}
           </div>
         )}
       </div>
