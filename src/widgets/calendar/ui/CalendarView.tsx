@@ -55,8 +55,8 @@ export function CalendarView({
   }
 
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[auto_1fr] lg:gap-8">
-      <Card className="w-fit max-w-full">
+    <div className="grid items-start gap-6 md:grid-cols-[auto_1fr] lg:gap-8">
+      <Card className="mx-auto w-fit max-w-full lg:mx-0">
         <CardContent>
           <Calendar
             mode="single"
@@ -74,6 +74,7 @@ export function CalendarView({
               hasEvents:
                 "font-semibold after:pointer-events-none after:absolute after:bottom-1 after:left-1/2 after:size-1 after:-translate-x-1/2 after:rounded-full after:bg-cyan-700",
             }}
+            className="mx-auto lg:mx-0"
           />
         </CardContent>
       </Card>
