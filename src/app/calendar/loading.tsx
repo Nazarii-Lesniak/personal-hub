@@ -6,6 +6,7 @@ export default function LoadingCalendarPage() {
       <output className="sr-only">Loading calendar...</output>
 
       <Skeleton className="h-8 w-36 md:h-9" />
+      <Skeleton className="h-8 w-110 md:h-9" />
 
       <div className="grid items-start gap-6 lg:grid-cols-[auto_1fr] lg:gap-8">
         <Skeleton className="h-80 w-full rounded-xl lg:w-80" />
