@@ -1,7 +1,7 @@
 import { getSessionCookie } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
 
-const AUTH_PAGES = ["/sign-in", "sign-up"];
+const AUTH_PAGES = ["/sign-in", "/sign-up"];
 
 export function proxy(request: NextRequest) {
   const isAuthPage = AUTH_PAGES.includes(request.nextUrl.pathname);
