@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { Button } from "@/shared/ui/button";
+
+import { UserMenu } from "./UserMenu";
 
 export function Header() {
   return (
@@ -30,6 +33,12 @@ export function Header() {
           >
             Calendar
           </Button>
+
+          <div className="ml-3 flex items-center">
+            <Suspense fallback={null}>
+              <UserMenu />
+            </Suspense>
+          </div>
         </nav>
       </div>
     </header>
